@@ -1,9 +1,17 @@
-import { Image, StyleSheet, Platform } from 'react-native';
-
+import { Image, Text, StyleSheet, Platform, Pressable } from 'react-native';
 import { HelloWave } from '@/components/HelloWave';
 import ParallaxScrollView from '@/components/ParallaxScrollView';
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
+import { signOut } from 'aws-amplify/auth';
+
+async function handleSignOut() {
+  try {
+    await signOut({ global: true });
+  } catch (error) {
+    console.log('error signing out: ', error);
+  }
+}
 
 export default function HomeScreen() {
   return (
@@ -18,6 +26,9 @@ export default function HomeScreen() {
       <ThemedView style={styles.titleContainer}>
         <ThemedText type="title">Welcome!</ThemedText>
         <HelloWave />
+        <Pressable style={styles.button} onPress={() => handleSignOut()}>
+          <Text style={styles.buttonText}>Sign out</Text>
+        </Pressable>
       </ThemedView>
       <ThemedView style={styles.stepContainer}>
         <ThemedText type="subtitle">Step 1: Try it</ThemedText>
@@ -66,5 +77,15 @@ const styles = StyleSheet.create({
     bottom: 0,
     left: 0,
     position: 'absolute',
+  },
+  button: {
+    marginTop: 50,
+    backgroundColor: '#B00020',
+    padding: 10,
+    borderRadius: 6,
+  },
+  buttonText: {
+    color: '#fff',
+    fontSize: 18,
   },
 });
